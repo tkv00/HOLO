@@ -21,9 +21,9 @@ public class UserService {
 //    private final DeviceInfoRepository deviceInfoRepository;
 
     // 로그인
-    public boolean login(String PhoneNum) {
+    public boolean login(String PhoneNumber) {
         // 휴대폰 번호를 이용해서 사용자 조회, 만약 사용자가 존재하면 로그인 Success
-        UserEntity checkuser = userRepository.findByPhoneNumber(PhoneNum);
+        UserEntity checkuser = userRepository.findByPhoneNumber(PhoneNumber);
         return checkuser != null;
     }
 

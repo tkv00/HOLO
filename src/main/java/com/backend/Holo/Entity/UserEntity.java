@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -41,20 +42,14 @@ public class UserEntity {
     @Column(unique = true)
     private String identificationNumber;
 
-    @NotNull
-    @NotEmpty
     private String imageURL;
 
-    @NotNull
-    private Double mannerTemp;
+    private float mannerTemp;
 
-    @NotNull
-    private String created;
+    private LocalDateTime created;
 
-    @NotNull
-    private String updated;
+    private LocalDateTime updated;
 
-    @NotNull
     private String status;
 
 }
