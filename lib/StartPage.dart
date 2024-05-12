@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holo/SignUp/SetLocationPage.dart';
+import 'package:holo/SignUp/LoginPage.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -36,12 +37,12 @@ class StartPage extends StatelessWidget {
             Text(
               '이웃과 함께하는 새로운 시작',
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
             Text(
               '지금 내 동네를 선택하고 시작해보세요!',
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
             Spacer(),
             ElevatedButton(
@@ -62,9 +63,15 @@ class StartPage extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                   minimumSize: Size(
-                      MediaQuery.of(context).size.width *
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .width *
                           0.9, //다른 디바이스에서의 사용 고려-> 디바이스 크기비율로 버튼 크기조정
-                      MediaQuery.of(context).size.height * 0.07),
+                      MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.07),
                   //다른 디바이스에서의 사용 고려-> 디바이스 크기비율로 버튼 크기조정
                   backgroundColor: Color(0xFF0077FF),
                   // 버튼 배경색 설정
@@ -83,7 +90,12 @@ class StartPage extends StatelessWidget {
                     style: TextStyle(color: Colors.grey),
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                        );
+
+                      },
                       child: Text(
                         '로그인',
                         style: TextStyle(color: const Color(0xFF0077FF)),
