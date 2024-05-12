@@ -11,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Getter @Setter
+@Table(name = "user")
 public class UserEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +40,21 @@ public class UserEntity {
 
     @Column(unique = true)
     private String identificationNumber;
+
+    @NotNull
+    @NotEmpty
+    private String imageURL;
+
+    @NotNull
+    private Double mannerTemp;
+
+    @NotNull
+    private String created;
+
+    @NotNull
+    private String updated;
+
+    @NotNull
+    private String status;
+
 }

@@ -1,9 +1,9 @@
 package com.backend.Holo.Service;
 
 
-import com.backend.Holo.Entity.DeviceInfo;
+//import com.backend.Holo.Entity.DeviceInfo;
 import com.backend.Holo.Entity.UserEntity;
-import com.backend.Holo.Repository.DeviceInfoRepository;
+//import com.backend.Holo.Repository.DeviceInfoRepository;
 import com.backend.Holo.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,40 +13,40 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final DeviceInfoRepository deviceInfoRepository;
+//    private final DeviceInfoRepository deviceInfoRepository;
 
     // 로그인
     public boolean login(String PhoneNum) {
         // 휴대폰 번호를 이용해서 사용자 조회, 만약 사용자가 존재하면 로그인 Success
-        UserEntity checkuser = userRepository.findByu_phone(PhoneNum);
+        UserEntity checkuser = userRepository.findByPhoneNumber(PhoneNum);
         return checkuser != null;
     }
 
-    // 자동 로그인
-    public boolean autoLogin(String PhoneNum, String deviceId) {
-        // 휴대폰 번호를 이용해서 사용자 조회, 기기 정보 저장 후 연결
-        UserEntity user = userRepository.findByu_phone(PhoneNum);
-        if (user != null) {
-            DeviceInfo deviceInfo = new DeviceInfo();
-            deviceInfo.setDeviceId(deviceId);
-            deviceInfo.setUser(user);
-            deviceInfoRepository.save(deviceInfo);
-
-            return true;
-        }
-        return false;
-    }
-
-    // 로그아웃
-    public void logout(String deviceId) {
-        // 기기 ID 이용해서 해당 기기 정보 삭제
-        deviceInfoRepository.deleteByDeviceId(deviceId);
-    }
+//    // 자동 로그인
+//    public boolean autoLogin(String PhoneNum, String deviceId) {
+//        // 휴대폰 번호를 이용해서 사용자 조회, 기기 정보 저장 후 연결
+//        UserEntity user = userRepository.findByPhoneNumber(PhoneNum);
+//        if (user != null) {
+//            DeviceInfo deviceInfo = new DeviceInfo();
+//            deviceInfo.setDeviceId(deviceId);
+//            deviceInfo.setUser(user);
+//            deviceInfoRepository.save(deviceInfo);
+//
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    // 로그아웃
+//    public void logout(String deviceId) {
+//        // 기기 ID 이용해서 해당 기기 정보 삭제
+//        deviceInfoRepository.deleteByDeviceId(deviceId);
+//    }
 
     // 회원 가입
     public Long signup(UserEntity user) {
@@ -56,7 +56,7 @@ public class UserService {
         }
 
         // 이미 존재하는 휴대폰 번호인지 확인
-        UserEntity existingUser = userRepository.findByu_phone(user.getPhoneNumber());
+        UserEntity existingUser = userRepository.findByPhoneNumber(user.getPhoneNumber());
         if (existingUser != null) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
