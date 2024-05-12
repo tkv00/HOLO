@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:holo/theme/color.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  final String selectedCity;
+  const SignUpPage({Key? key, required this.selectedCity}) : super(key: key);
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -71,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   contentPadding: EdgeInsets.symmetric(vertical:5),
                   border: InputBorder.none,
                   labelText: '이름',
-                  fillColor: Color.fromRGBO(248, 248, 248, 1),
+                  fillColor: gray10,
                   filled: true,
                 ),
                 validator: (value) {
@@ -85,6 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
               SizedBox(height: 20),
+
               Row(
                 children: [
                   Expanded(
@@ -94,7 +97,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: '주민등록번호 앞 6자리',
-                        fillColor: Color.fromRGBO(248, 248, 248, 1),
+                        fillColor: gray10,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(vertical:5),
                       ),
@@ -121,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(vertical:5),
                         labelText: '',
-                        fillColor: Color.fromRGBO(248, 248, 248, 1),
+                        fillColor: gray10,
                         filled: true,
                       ),
                       keyboardType: TextInputType.number,
@@ -152,7 +155,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   contentPadding: EdgeInsets.symmetric(vertical:5),
                   border: InputBorder.none,
                   labelText: '휴대폰 번호(-없이 숫자만 입력)',
-                  fillColor: Color.fromRGBO(248, 248, 248, 1),
+                  fillColor: gray10,
                   filled: true,
                 ),
                 keyboardType: TextInputType.number,
@@ -183,8 +186,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonEnabled
-                        ? Colors.blue
-                        : Color.fromRGBO(248, 248, 248, 1), // 버튼 활성화 시 색상 변경
+                        ? blue
+                        : gray10, // 버튼 활성화 시 색상 변경
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -197,7 +200,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontSize: 14,
                       color: _isButtonEnabled
                           ? Colors.white
-                          : Color.fromRGBO(168, 168, 168, 1),
+                          : gray10,
                     ),
                   ),
                 ),
