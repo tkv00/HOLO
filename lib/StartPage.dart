@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holo/SignUp/SetLocationPage.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -44,7 +45,13 @@ class StartPage extends StatelessWidget {
             ),
             Spacer(),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SetLocationPage()),
+                );
+              },
               child: Text(
                 '시작하기',
                 style: TextStyle(
@@ -59,7 +66,7 @@ class StartPage extends StatelessWidget {
                           0.9, //다른 디바이스에서의 사용 고려-> 디바이스 크기비율로 버튼 크기조정
                       MediaQuery.of(context).size.height * 0.07),
                   //다른 디바이스에서의 사용 고려-> 디바이스 크기비율로 버튼 크기조정
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Color(0xFF0077FF),
                   // 버튼 배경색 설정
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
@@ -79,7 +86,7 @@ class StartPage extends StatelessWidget {
                       onPressed: () {},
                       child: Text(
                         '로그인',
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: const Color(0xFF0077FF)),
                       ))
                 ],
               ),
