@@ -14,29 +14,29 @@ import java.util.Date;
 public class UserEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long id;
+    @Column(name = "userId")
+    private Long userId;
 
     @NotNull
     @NotEmpty(message = "휴대폰 번호 기입은 필수입니다.")
-    private String u_phone;
+    private String phoneNumber;
 
     @NotNull
     @NotEmpty(message = "실명 기입은 필수입니다.")
-    private String u_name;
+    private String userName;
 
     @NotNull(message = "생년월일 기입은 필수입니다.")
-    private Date u_birthdate;
+    private Date birthDate;
 
     @NotNull
     @NotEmpty(message = "닉네임 기입은 필수입니다.")
-    private String u_username;
+    private String nickName;
 
     @Email
     @NotNull
     @NotEmpty(message = "이메일 주소 기입은 필수입니다.")
-    private String u_email;
+    private String email;
 
     @Column(unique = true)
-    private String personalIdentificationNumber;
+    private String identificationNumber;
 }

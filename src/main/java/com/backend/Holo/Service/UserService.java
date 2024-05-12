@@ -21,16 +21,16 @@ public class UserService {
     private final DeviceInfoRepository deviceInfoRepository;
 
     // 로그인
-    public boolean login(String uPhone) {
+    public boolean login(String PhoneNum) {
         // 휴대폰 번호를 이용해서 사용자 조회, 만약 사용자가 존재하면 로그인 Success
-        UserEntity checkuser = userRepository.findByu_phone(uPhone);
+        UserEntity checkuser = userRepository.findByu_phone(PhoneNum);
         return checkuser != null;
     }
 
     // 자동 로그인
-    public boolean autoLogin(String uPhone, String deviceId) {
+    public boolean autoLogin(String PhoneNum, String deviceId) {
         // 휴대폰 번호를 이용해서 사용자 조회, 기기 정보 저장 후 연결
-        UserEntity user = userRepository.findByu_phone(uPhone);
+        UserEntity user = userRepository.findByu_phone(PhoneNum);
         if (user != null) {
             DeviceInfo deviceInfo = new DeviceInfo();
             deviceInfo.setDeviceId(deviceId);
@@ -56,18 +56,18 @@ public class UserService {
         }
 
         // 이미 존재하는 휴대폰 번호인지 확인
-        UserEntity existingUser = userRepository.findByu_phone(user.getU_phone());
+        UserEntity existingUser = userRepository.findByu_phone(user.getPhoneNumber());
         if (existingUser != null) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
 
         // 개인 식별번호 생성 및 부여
         String personalIdentificationNumber = generatePersonalIdentificationNumber();
-        user.setPersonalIdentificationNumber(personalIdentificationNumber);
+        user.setIdentificationNumber(personalIdentificationNumber);
 
         // 회원 저장
         userRepository.save(user);
-        return user.getId();
+        return user.getUserId();
     }
 
     // SMS 인증
@@ -94,6 +94,4 @@ public class UserService {
         }
         return sb.toString();
     }
-
-
 }

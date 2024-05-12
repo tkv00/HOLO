@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface DeviceInfoRepository extends JpaRepository<DeviceInfo, Long> {
 
     DeviceInfo findByDeviceId(String deviceId);
-
     void deleteByDeviceId(String deviceId);
 }
