@@ -2,33 +2,33 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:holo/theme/color.dart';
 import 'package:flutter/services.dart';
-import 'package:holo/SignUp/LoginPage1.dart';
+import 'package:holo/SignUp/FindAccountByEmail1.dart';
 
-class LoginPage2 extends StatefulWidget {
-  final String phoneNumber;
+class FindAccountByEmail2 extends StatefulWidget {
+  final String email;
 
-  const LoginPage2({Key? key, required this.phoneNumber}) : super(key: key);
+  const FindAccountByEmail2({Key? key, required this.email}) : super(key: key);
 
   @override
-  State<LoginPage2> createState() => _LoginPage2State();
+  State<FindAccountByEmail2> createState() => _FindAccountByEmail2State();
 }
 
-class _LoginPage2State extends State<LoginPage2> {
-
-  int _seconds=300;
-  bool _isRunning=false;
-  bool _isButtonEnabled=false;
+class _FindAccountByEmail2State extends State<FindAccountByEmail2> {
+  int _seconds = 300;
+  bool _isRunning = false;
   Timer? _timer;
-  final TextEditingController _codeController=TextEditingController();
+  bool _isButtonEnabled = false; //인증번호확인 비활성화
+  final TextEditingController _codeController = TextEditingController();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _startTimer();
     _codeController.addListener(_onCodeChanged);
+    _startTimer();
   }
 
-  void _startTimer(){
+
+  void _startTimer() {
     if (_timer != null) {
       _timer!.cancel(); // Ensure no multiple timers run simultaneously
     }
@@ -47,22 +47,21 @@ class _LoginPage2State extends State<LoginPage2> {
     _isRunning = true;
   }
 
-
-  void _resetTimer(){
+  void _resetTimer() {
     setState(() {
-      _seconds=300;
+      _seconds = 300;
       _startTimer();
     });
   }
 
-  void _onCodeChanged(){
-    if(_codeController.text.length==4){
+  void _onCodeChanged() {
+    if (_codeController.text.length == 4) {
       setState(() {
-        _isButtonEnabled=true;
+        _isButtonEnabled = true;
       });
-    }else{
+    } else {
       setState(() {
-        _isButtonEnabled=false;
+        _isButtonEnabled = false;
       });
     }
   }
@@ -73,6 +72,7 @@ class _LoginPage2State extends State<LoginPage2> {
     _codeController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,12 +96,11 @@ class _LoginPage2State extends State<LoginPage2> {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Text(
-                  widget.phoneNumber,
+                  widget.email,
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black
-                  ),
+                      color: Colors.black),
                 ),
               ),
               const SizedBox(height: 10),
@@ -118,28 +117,25 @@ class _LoginPage2State extends State<LoginPage2> {
                       elevation: 0.0,
                     ),
                     onPressed: _resetTimer,
-                    child:   Text(
-                      '인증번호 다시 받기 (${(_seconds/60).floor()}분 ${_seconds%60}초)',
+                    child: Text(
+                      '인증메일 다시 받기 (${(_seconds / 60).floor()}분 ${_seconds % 60}초)',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600
-                      ),
-                    )
-                ),
+                          color: Colors.black, fontWeight: FontWeight.w600),
+                    )),
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _codeController,
                 style: const TextStyle(fontSize: 16), // More visible font size
                 decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: blue,
-                          width: 2.0
-                      )
-                  ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 5.0,horizontal: 10),
                   border: InputBorder.none,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: blue,
+                      width: 2.0
+                    )
+                  ),
                   fillColor: gray10,
                   filled: true,
                   labelText: '인증번호 입력',
@@ -164,9 +160,9 @@ class _LoginPage2State extends State<LoginPage2> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.05,
                 child: ElevatedButton(
-                  onPressed: _isButtonEnabled ? () {} :null ,
+                  onPressed: _isButtonEnabled ? () {} : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isButtonEnabled ? blue:gray30,
+                    backgroundColor: _isButtonEnabled ? blue : gray30,
                     // 버튼 활성화 시 색상 변경
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -183,7 +179,6 @@ class _LoginPage2State extends State<LoginPage2> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

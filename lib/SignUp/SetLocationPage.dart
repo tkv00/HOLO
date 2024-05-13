@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:holo/SignUp/SignUpPage.dart';
+import 'package:holo/SignUp/SignUpPage1.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:holo/theme/color.dart'; // color.dart에서 적절한 색상 정보를 가져오는 것으로 가정합니다.
 
@@ -73,7 +73,13 @@ class _SetLocationPageState extends State<SetLocationPage> {
             child: TextField(
               onChanged: (value) => filterSearchResults(value),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 5),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: blue,
+                        width: 2.0
+                    )
+                ),
+                contentPadding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                 border: InputBorder.none,
                 hintText: '동명(읍,면)으로 검색(ex.삼성동)',
                 filled: true,
@@ -131,7 +137,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) =>
-                            SignUpPage(
+                            SignUpPage1(
                                 selectedCity: filteredCities[index]['addr_name']))
                     );
                   },

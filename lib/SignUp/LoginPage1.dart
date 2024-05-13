@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:holo/theme/color.dart';
 import 'package:flutter/services.dart';
+import 'package:holo/SignUp/FindAccountByEmail1.dart';
 import 'package:holo/SignUp/LoginPage2.dart';
 
 class LoginPage1 extends StatefulWidget {
@@ -13,7 +14,7 @@ class LoginPage1 extends StatefulWidget {
 class _LoginPage1State extends State<LoginPage1> {
   final TextEditingController _phoneController = TextEditingController();
   final FocusNode _phoneFocusNode = FocusNode();
-  final GlobalKey<FormState> _formkey=GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
   String? _errorMessage;
 
@@ -22,12 +23,14 @@ class _LoginPage1State extends State<LoginPage1> {
     super.initState();
     _phoneController.addListener(_updateButtonState);
   }
+
   void _updateButtonState() {
     final phoneText = _phoneController.text;
     setState(() {
       _isButtonEnabled = phoneText.length == 11;
     });
   }
+
   bool _validatePhoneNumber() {
     final phoneText = _phoneController.text;
     if (!RegExp(r'^010\d{8}$').hasMatch(phoneText)) {
@@ -97,7 +100,13 @@ class _LoginPage1State extends State<LoginPage1> {
                 controller: _phoneController,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 5),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: blue,
+                          width: 2.0
+                      )
+                  ),
+                  contentPadding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                   border: InputBorder.none,
                   labelText: '휴대폰 번호(-없이 숫자만 입력)',
                   fillColor: gray10,
@@ -116,15 +125,22 @@ class _LoginPage1State extends State<LoginPage1> {
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 5.0),
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.9,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.05,
                 child: ElevatedButton(
                   onPressed: _isButtonEnabled ? () {
                     if (_validatePhoneNumber()) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage2(phoneNumber: _phoneController.text),
+                          builder: (context) =>
+                              LoginPage2(phoneNumber: _phoneController.text),
                         ),
                       );
                     }
@@ -158,7 +174,14 @@ class _LoginPage1State extends State<LoginPage1> {
                     style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                FindAccountByEmail1())
+                        );
+                      },
+
                       child: Text(
                         '이메일로 계정 찾기',
                         style: TextStyle(
