@@ -20,11 +20,11 @@ public class SmsProvider {
         this.messageService = NurigoApp.INSTANCE.initialize(API_KEY, API_SECRET_KEY, DOMAIN);
     }
 
-    public boolean sendSms(String to) {
+    public boolean sendSms(String to, String messageText) {
         Message message = new Message();
         message.setFrom(FROM);
         message.setTo(to);
-        message.setText("문자내용");
+        message.setText(messageText);
 
         SingleMessageSentResponse response = messageService.sendOne(new SingleMessageSendingRequest(message));
 

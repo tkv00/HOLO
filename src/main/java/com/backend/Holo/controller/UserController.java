@@ -7,10 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +23,16 @@ public class UserController {
 
     // 회원가입 api
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@Validated @RequestBody UserEntity userEntity, BindingResult bindingResult) {
+    public ResponseEntity<String> signup(@Validated @RequestBody UserEntity userEntity,
+                                         @RequestParam String verificationCode,
+                                         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.error("유효하지 않은 사용자 데이터가 전송되었습니다: {}", bindingResult.getAllErrors());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용할 수 없는 유저 데이터 응기잇");
         }
         try {
-            Long userId = userService.signup(userEntity);
-            return ResponseEntity.status(HttpStatus.CREATED).body("회원가입에 성공하였습니다! 회원님의 고유 번호는 " + userEntity.getIdentificationNumber() + "입니다.");
+            Long userId = userService.signup(userEntity, verificationCode);
+            return ResponseEntity.status(HttpStatus.CREATED).body("회원가입에 성공하였습니다! 회원님의 고유 번호는 " + userId + "입니다.");
         } catch (IllegalStateException e) {
             logger.error("회원가입 중 오류 발생: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

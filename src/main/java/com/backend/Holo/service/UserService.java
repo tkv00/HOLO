@@ -2,6 +2,7 @@ package com.backend.Holo.service;
 
 
 import com.backend.Holo.entity.UserEntity;
+import com.backend.Holo.provider.SmsProvider;
 import com.backend.Holo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 //    private final DeviceInfoRepository deviceInfoRepository;
+    private final SmsProvider smsProvider;
 
     // 로그인
     public boolean login(String PhoneNumber) {
@@ -47,9 +49,11 @@ public class UserService {
 //    }
 
     // 회원 가입
-    public Long signup(UserEntity user) {
+    public Long signup(UserEntity user, String verificationCode) {
 
-        if (!smsAuthentication(user)) {
+        // SMS 인증 확인
+        boolean isVerified = verifySmsCode(user.getPhoneNumber(), verificationCode);
+        if (!isVerified) {
             throw new IllegalStateException("SMS 인증에 실패했습니다.");
         }
 
@@ -87,9 +91,12 @@ public class UserService {
         return sb.toString();
     }
 
-    // SMS 인증
-    private boolean smsAuthentication(UserEntity user) {
-        // 여기에 SMS 인증 로직 구현하기
-        return true;
+    // 인증번호 확인
+    private boolean verifySmsCode(String phoneNumber, String verificationCode) {
+        // 여기에 SMS 인증번호 확인 로직 구현하기
+        // 사용자가 입력한 인증번호가 유효한지 확인하는 로직을 구현합니다.
+        // SMSProvider 클래스의 기능을 사용하여 SMS를 전송한 인증번호와 사용자가 입력한 인증번호를 비교합니다.
+        // 실제로는 SMS 인증번호를 저장하고 비교하는 등의 추가적인 처리가 필요할 수 있습니다.
+        return true; // 임시로 항상 true 반환 (실제 구현 필요)
     }
 }
