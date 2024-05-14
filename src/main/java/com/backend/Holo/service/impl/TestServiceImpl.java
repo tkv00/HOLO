@@ -20,7 +20,7 @@ public class TestServiceImpl implements TestService {
         String verificationCode = generateVerificationCode();
 
         // SMS 메시지 내용 설정
-        String messageText = "[Holo] 본인 확인 인증번호입니다. " + verificationCode;
+        String messageText = "[Holo] 본인 확인 인증번호입니다.\n" + verificationCode;
 
         try {
             boolean result = smsProvider.sendSms(phoneNumber, messageText);
