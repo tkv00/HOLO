@@ -18,7 +18,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
   double lat = 0.0;
   double lng = 0.0;
   final String _googleApiKey =
-      'AIzaSyBL_cYaMI6JGTvO4tYclHfIgnXgS31wFjA'; // API 키를 안전하게 관리
+      ''; // API 키를 안전하게 관리
   bool addressFetched = false;
 
 // 현재 위치 정보 가져오기
@@ -93,7 +93,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
 
   Future<String> getPlaceAddress(double lat, double lng) async {
     final url =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&language=ko&key=AIzaSyBL_cYaMI6JGTvO4tYclHfIgnXgS31wFjA';
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&language=';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var decodedResponse = jsonDecode(response.body);
