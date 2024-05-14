@@ -1,8 +1,8 @@
-package com.backend.Holo.Service;
+package com.backend.Holo.service;
 
 
-import com.backend.Holo.Entity.UserEntity;
-import com.backend.Holo.Repository.UserRepository;
+import com.backend.Holo.entity.UserEntity;
+import com.backend.Holo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

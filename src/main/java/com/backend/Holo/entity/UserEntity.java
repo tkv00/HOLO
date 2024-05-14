@@ -1,4 +1,4 @@
-package com.backend.Holo.Entity;
+package com.backend.Holo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter @Setter

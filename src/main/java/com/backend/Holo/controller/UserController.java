@@ -1,7 +1,7 @@
-package com.backend.Holo.Controller;
+package com.backend.Holo.controller;
 
-import com.backend.Holo.Entity.UserEntity;
-import com.backend.Holo.Service.UserService;
+import com.backend.Holo.entity.UserEntity;
+import com.backend.Holo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
