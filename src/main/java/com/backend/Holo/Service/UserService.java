@@ -1,9 +1,7 @@
 package com.backend.Holo.Service;
 
 
-//import com.backend.Holo.Entity.DeviceInfo;
 import com.backend.Holo.Entity.UserEntity;
-//import com.backend.Holo.Repository.DeviceInfoRepository;
 import com.backend.Holo.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,18 +60,12 @@ public class UserService {
         }
 
         // 개인 식별번호 생성 및 부여
-        String personalIdentificationNumber = generatePersonalIdentificationNumber();
-        user.setIdentificationNumber(personalIdentificationNumber);
+        String IdentificationNumber = generateIdentificationNumber();
+        user.setIdentificationNumber(IdentificationNumber);
 
         // 회원 저장
         userRepository.save(user);
         return user.getUserId();
-    }
-
-    // SMS 인증
-    private boolean smsAuthentication(UserEntity user) {
-        // 여기에 SMS 인증 로직 구현하기
-        return true;
     }
 
     // 회원 전체 조회
@@ -82,7 +74,7 @@ public class UserService {
     }
 
     // 개인 식별번호 생성
-    private String generatePersonalIdentificationNumber() {
+    private String generateIdentificationNumber() {
         // 랜덤한 문자열을 생성
         String ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder sb = new StringBuilder();
@@ -93,5 +85,11 @@ public class UserService {
             sb.append(ch.charAt(index));
         }
         return sb.toString();
+    }
+
+    // SMS 인증
+    private boolean smsAuthentication(UserEntity user) {
+        // 여기에 SMS 인증 로직 구현하기
+        return true;
     }
 }

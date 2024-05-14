@@ -28,7 +28,7 @@ public class UserEntity {
     private String userName;
 
     @NotNull(message = "생년월일 기입은 필수입니다.")
-    private Date birthDate;
+    private String birthDate;
 
     @NotNull
     @NotEmpty(message = "닉네임 기입은 필수입니다.")

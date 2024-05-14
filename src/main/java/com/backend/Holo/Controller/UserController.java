@@ -1,7 +1,6 @@
 package com.backend.Holo.Controller;
 
 import com.backend.Holo.Entity.UserEntity;
-import com.backend.Holo.Repository.UserRepository;
 import com.backend.Holo.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,8 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,18 +21,20 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // 회원가입 api
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Validated @RequestBody UserEntity userEntity, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용할 수 없는 유저 데이터");
+            logger.error("유효하지 않은 사용자 데이터가 전송되었습니다: {}", bindingResult.getAllErrors());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용할 수 없는 유저 데이터 응기잇");
         }
         try {
             Long userId = userService.signup(userEntity);
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입에 성공하였습니다! 회원님의 고유 번호는 " + userEntity.getIdentificationNumber() + "입니다.");
         } catch (IllegalStateException e) {
+            logger.error("회원가입 중 오류 발생: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -47,8 +49,9 @@ public class UserController {
         if (success) {
             return ResponseEntity.ok("로그인에 성공하였습니다.");
         } else {
+            logger.warn("로그인 실패: 전달된 전화번호 - {}", phoneNumber);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인에 실패하였습니다.");
         }
     }
-
 }
+
