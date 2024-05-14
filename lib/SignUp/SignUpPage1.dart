@@ -14,42 +14,59 @@ class SignUpPage1 extends StatefulWidget {
 
 class _SignUpPage1State extends State<SignUpPage1> {
   final _formKey = GlobalKey<FormState>();
+
   bool _isButtonEnabled = false;
   String userName = '';
-  String userEmail = '';
   String userBirthDay = '';
   String userPhoneNumber = '';
 
-  //유저 정보 SignUpPage2페이지로 넘기기.
-  void _trySubmit() {
-    final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-      Map<String, String> userInfo = {
-        'name': userName,
-        'birthday': userBirthDay,
-        'email': userEmail,
-        'phone': userPhoneNumber,
-        'city': widget.selectedCity
-      };
-      Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => SignUpPage2(userInfo: userInfo))
-      );
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _birthDayController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+
+  final FocusNode _nameFocus = FocusNode();
+  final FocusNode _birthDayFocus = FocusNode();
+  final FocusNode _phoneFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_checkFormValidity);
+    _birthDayController.addListener(_checkFormValidity);
+    _phoneNumberController.addListener(_checkFormValidity);
+    _nameFocus.addListener(() => _onFocusChange(_nameFocus));
+    _birthDayFocus.addListener(() => _onFocusChange(_birthDayFocus));
+    _phoneFocus.addListener(() => _onFocusChange(_phoneFocus));
+  }
+  void _checkFormValidity() {
+    bool isValid = _nameController.text.isNotEmpty &&
+        _birthDayController.text.isNotEmpty &&
+        _phoneNumberController.text.length == 11 &&
+        _phoneNumberController.text.startsWith('010');
+
+    if (isValid != _isButtonEnabled) {
+      setState(() {
+        _isButtonEnabled = isValid;
+      });
+    }
+  }
+  void _onFocusChange(FocusNode focusNode) {
+    if (!focusNode.hasFocus) {
+      setState(() {
+        _formKey.currentState?.validate();
+      });
     }
   }
 
-  void _tryValidation() {
-    final isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-    }
-  }
-
-  void _updateButtonState() {
-    setState(() {
-      _isButtonEnabled = _formKey.currentState?.validate() ?? false;
-    });
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _birthDayController.dispose();
+    _phoneNumberController.dispose();
+    _nameFocus.dispose();
+    _birthDayFocus.dispose();
+    _phoneFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +84,6 @@ class _SignUpPage1State extends State<SignUpPage1> {
         child: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.disabled,
-          onChanged: _updateButtonState, // 폼이 변경될 때마다 버튼 상태 업데이트
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -97,41 +113,36 @@ class _SignUpPage1State extends State<SignUpPage1> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                onSaved: (value) {
-                  userName = value!;
-                },
-                key: ValueKey(1),
+                controller: _nameController,
+                focusNode: _nameFocus,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: blue, width: 2.0)),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '이름',
                   fillColor: gray10,
                   filled: true,
                 ),
                 validator: (value) {
-                  if (value!.isEmpty ||
-                      !RegExp(r'^[가-힣]+$').hasMatch(value)) {
+                  if (value!.isEmpty || !RegExp(r'^[가-힣]+$').hasMatch(value)) {
                     return '한글 이름을 입력해주세요.';
                   }
                   return null;
                 },
-                autovalidateMode: AutovalidateMode.disabled,
+                onSaved: (value) {
+                  userName = value!;
+                },
               ),
               SizedBox(height: 20),
-
               Row(
                 children: [
                   Expanded(
                     flex: 4,
                     child: TextFormField(
-                      key: ValueKey(2),
-                      onSaved: (value) {
-                        userBirthDay = value!;
-                      },
+                      controller: _birthDayController,
+                      focusNode: _birthDayFocus,
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -140,8 +151,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
                         labelText: '주민등록번호 앞 6자리',
                         fillColor: gray10,
                         filled: true,
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -154,18 +164,19 @@ class _SignUpPage1State extends State<SignUpPage1> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        userBirthDay = value!;
+                      },
                     ),
                   ),
                   SizedBox(width: 10),
                   Expanded(
                     flex: 1,
                     child: TextFormField(
-                      key: ValueKey(3),
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: blue, width: 2.0)),
                         fillColor: gray10,
@@ -188,14 +199,11 @@ class _SignUpPage1State extends State<SignUpPage1> {
               ),
               SizedBox(height: 20),
               TextFormField(
-                onSaved: (value) {
-                  userPhoneNumber = value!;
-                },
-                key: ValueKey(4),
                 cursorColor: Colors.black,
+                controller: _phoneNumberController,
+                focusNode: _phoneFocus,
                 decoration: InputDecoration(
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '휴대폰 번호(-없이 숫자만 입력)',
                   focusedBorder: OutlineInputBorder(
@@ -209,31 +217,28 @@ class _SignUpPage1State extends State<SignUpPage1> {
                   LengthLimitingTextInputFormatter(11)
                 ],
                 validator: (value) {
-                  if (value == null || value.length != 11) {
-                    return '11자리 휴대폰 번호를 입력해주세요.';
+                  if (value == null) {
+                    return '휴대폰 번호를 입력해주세요.';
+                  }
+                  if (!RegExp(r'^010[1-9]\d{7}$').hasMatch(value)) {
+                    return '유효한 휴대폰 번호를 입력해주세요.';
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  userPhoneNumber = value!;
+                },
               ),
               SizedBox(height: 20),
-
               // 마지막 버튼
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 5.0),
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.9,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height * 0.05,
                 child: ElevatedButton(
-                  onPressed: _isButtonEnabled
-                      ? _trySubmit : null,
+                  onPressed: _isButtonEnabled ? _trySubmit : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    _isButtonEnabled ? blue : gray10, // 버튼 활성화 시 색상 변경
+                    backgroundColor: _isButtonEnabled ? blue : gray10, // 버튼 활성화 시 색상 변경
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -254,5 +259,21 @@ class _SignUpPage1State extends State<SignUpPage1> {
         ),
       ),
     );
+  }
+
+  void _trySubmit() {
+    if (_isButtonEnabled && _formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SignUpPage2(userInfo: {
+            'name': _nameController.text,
+            'birthday': _birthDayController.text,
+            'phone': _phoneNumberController.text,
+            'city': widget.selectedCity,
+          }),
+        ),
+      );
+    }
   }
 }

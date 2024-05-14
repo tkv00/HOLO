@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:holo/theme/color.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:holo/SignUp/SignUpPage2.dart';
+import 'dart:convert';
 
 class SignUpPage3 extends StatefulWidget {
   final Map<String, String> userInfo;
@@ -13,7 +15,37 @@ class SignUpPage3 extends StatefulWidget {
 }
 
 class _SignUpPage3State extends State<SignUpPage3> {
-  @override
+    TextEditingController emailController=TextEditingController();
+    TextEditingController nickNameController=TextEditingController();
+
+  Future<void> sendUserInfo() async {
+    widget.userInfo['nickName']=nickNameController.text;
+    widget.userInfo['email']=emailController.text;
+
+
+    var response = await http.post(
+      Uri.parse('http://165.229.110.162:8080/api/signup'), // 서버의 주소와 엔드포인트를 정확히 입력하세요.
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'phoneNumber':widget.userInfo['phone'],
+        'userName':widget.userInfo['name'],
+        'birthDate':widget.userInfo['birthday'],
+        'nickName':widget.userInfo['nickName'],
+        'email':widget.userInfo['email']
+      }),
+    );
+    if (response.statusCode == 200) {
+      print('회원 가입이 성공적으로 완료되었습니다.');
+      // 성공 처리 로직, 예를 들어 다음 페이지로 네비게이션 하기
+    } else {
+      print('회원 가입 실패: ${response.body}');
+      // 실패 처리 로직, 예를 들어 에러 메시지 표시
+    }
+  }
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -57,6 +89,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
               ),
               TextFormField(
                 cursorColor: Colors.black,
+                controller: emailController,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: blue, width: 2.0)),
@@ -72,6 +105,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
                 height: 20,
               ),
               TextFormField(
+                controller: nickNameController,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
@@ -90,7 +124,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.05,
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: sendUserInfo,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: gray30, // 버튼 활성화 시 색상 변경
                     shape: RoundedRectangleBorder(
