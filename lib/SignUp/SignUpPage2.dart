@@ -4,7 +4,9 @@ import 'package:holo/theme/color.dart';
 import 'package:flutter/services.dart';
 import 'package:holo/SignUp/SignUpPage1.dart';
 import 'package:holo/SignUp/SignUpPage3.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:holo/controller/API_KEY.dart';
 
 class SignUpPage2 extends StatefulWidget {
   final Map<String, String> userInfo;
@@ -17,7 +19,7 @@ class SignUpPage2 extends StatefulWidget {
 
 class _SignUpPage2State extends State<SignUpPage2> {
 
-  int _seconds = 300;
+  int _seconds = 180;
   bool _isRunning = false;
   bool _isButtonEnabled = false;
   Timer? _timer;
@@ -58,7 +60,7 @@ class _SignUpPage2State extends State<SignUpPage2> {
   }
 
   void _onCodeChanged() {
-    if (_codeController.text.length == 4) {
+    if (_codeController.text.length == 6) {
       setState(() {
         _isButtonEnabled = true;
       });
@@ -68,7 +70,35 @@ class _SignUpPage2State extends State<SignUpPage2> {
       });
     }
   }
+  Future<void> _sendVerificationCodeToServer(String code) async {
+    var response=await http.post(
+      Uri.parse('$HTTP_KEY/message/check'),
+      headers: <String,String>{
+        'Content-Type':'application/json; charsett=UTF-8',
 
+      },
+      body: jsonEncode({
+        'phoneNumber':widget.userInfo['phone'],
+        'verificationCode':code,
+      }),
+    );
+    if(response.statusCode==20) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('인증이 완료되었습니다.')));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) =>
+              SignUpPage3(userInfo: widget.userInfo))
+      );
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('인증 번호를 다시 확인해 주세요.')));
+
+      }
+  }
+
+  void _trySubmit(){
+    if(_isButtonEnabled){
+      _sendVerificationCodeToServer(_codeController.text);
+    }
+  }
   @override
   void dispose() {
     _timer?.cancel(); // Properly dispose the timer to avoid memory leaks
@@ -189,12 +219,7 @@ class _SignUpPage2State extends State<SignUpPage2> {
                     .size
                     .height * 0.05,
                 child: ElevatedButton(
-                  onPressed: _isButtonEnabled ? () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) =>
-                            SignUpPage3(userInfo: widget.userInfo))
-                    );
-                  } : null,
+                  onPressed: _isButtonEnabled ? _trySubmit: null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonEnabled ? blue : gray30,
                     // 버튼 활성화 시 색상 변경

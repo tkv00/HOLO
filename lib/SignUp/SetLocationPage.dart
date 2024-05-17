@@ -6,7 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:holo/theme/color.dart'; // color.dart에서 적절한 색상 정보를 가져오는 것으로 가정합니다.
 import 'package:geolocator/geolocator.dart';
 import 'package:holo/controller/apiKeyManager.dart';
-
+import 'package:holo/controller/API_KEY.dart';
 class SetLocationPage extends StatefulWidget {
   const SetLocationPage({super.key});
 
@@ -18,7 +18,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
   double lat = 0.0;
   double lng = 0.0;
   final String _googleApiKey =
-      'AIzaSyBL_cYaMI6JGTvO4tYclHfIgnXgS31wFjA'; // API 키를 안전하게 관리
+      GOOGLE_APIKEY; // API 키를 안전하게 관리
   bool addressFetched = false;
 
 // 현재 위치 정보 가져오기
@@ -93,7 +93,7 @@ class _SetLocationPageState extends State<SetLocationPage> {
 
   Future<String> getPlaceAddress(double lat, double lng) async {
     final url =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&language=ko&key=AIzaSyBL_cYaMI6JGTvO4tYclHfIgnXgS31wFjA';
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&${_googleApiKey}';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var decodedResponse = jsonDecode(response.body);

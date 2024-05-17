@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:holo/theme/color.dart';
 import 'package:holo/SignUp/SignUpPage2.dart';
+import 'package:holo/controller/API_KEY.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignUpPage1 extends StatefulWidget {
   final String selectedCity;
@@ -55,6 +58,44 @@ class _SignUpPage1State extends State<SignUpPage1> {
       setState(() {
         _formKey.currentState?.validate();
       });
+    }
+  }
+  Future<void> _sendPhoneNumberToServer(String number) async {
+    var response = await http.post(
+      Uri.parse('$HTTP_KEY/message/send'), // 서버의 주소와 엔드포인트를 정확히 입력하세요.
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'phoneNumber':'$number',
+
+      }),
+    );
+    if (response.statusCode == 200) {
+      //userInfo전송
+      Map<String,String> userInfo={
+        'name':_nameController.text,
+        'birthday':_birthDayController.text,
+        'phone':_phoneNumberController.text,
+        'city':widget.selectedCity,
+      };
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('인증번호가 성공적으로 전송되었습니다.')));
+
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context)=>
+              SignUpPage2(userInfo: userInfo))
+      );
+
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('휴대폰 번호를 다시 확인해 주세요.')));
+
+      }
+  }
+
+  void _trySubmit() {
+    if (_isButtonEnabled && _formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      _sendPhoneNumberToServer(_phoneNumberController.text);
     }
   }
 
@@ -259,21 +300,5 @@ class _SignUpPage1State extends State<SignUpPage1> {
         ),
       ),
     );
-  }
-
-  void _trySubmit() {
-    if (_isButtonEnabled && _formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => SignUpPage2(userInfo: {
-            'name': _nameController.text,
-            'birthday': _birthDayController.text,
-            'phone': _phoneNumberController.text,
-            'city': widget.selectedCity,
-          }),
-        ),
-      );
-    }
   }
 }

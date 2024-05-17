@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:holo/SignUp/SignUpPage2.dart';
 import 'dart:convert';
+import 'package:holo/controller/API_KEY.dart';
 
 class SignUpPage3 extends StatefulWidget {
   final Map<String, String> userInfo;
-
   const SignUpPage3({Key? key, required this.userInfo}) : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
 
 
     var response = await http.post(
-      Uri.parse('http://165.229.110.162:8080/api/signup'), // 서버의 주소와 엔드포인트를 정확히 입력하세요.
+      Uri.parse('$HTTP_KEY'), // 서버의 주소와 엔드포인트를 정확히 입력하세요.
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
