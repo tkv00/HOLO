@@ -1,6 +1,6 @@
 package com.backend.Holo.controller;
 
-import com.backend.Holo.service.TestService;
+import com.backend.Holo.service.SMSService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +10,14 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/message")
-public class TestController {
+public class SMSController {
 
-    private final TestService testService;
+    private final SMSService smsService;
 
     @PostMapping("/send")
     public ResponseEntity<String> sendSms(@RequestBody Map<String, String> requestBody) {
         String phoneNumber = requestBody.get("phoneNumber");
-        ResponseEntity<String> response = testService.sendSms(phoneNumber);
+        ResponseEntity<String> response = smsService.sendSms(phoneNumber);
         return response;
     }
 
@@ -25,7 +25,7 @@ public class TestController {
     public ResponseEntity<String> checkCode(@RequestBody Map<String, String> requestBody) {
         String phoneNumber = requestBody.get("phoneNumber");
         String verificationCode = requestBody.get("verificationCode");
-        ResponseEntity<String> response = testService.checkVerificationCode(phoneNumber, verificationCode);
+        ResponseEntity<String> response = smsService.checkVerificationCode(phoneNumber, verificationCode);
         return response;
     }
 }

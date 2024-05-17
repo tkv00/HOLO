@@ -1,7 +1,7 @@
 package com.backend.Holo.service.impl;
 
 import com.backend.Holo.provider.SmsProvider;
-import com.backend.Holo.service.TestService;
+import com.backend.Holo.service.SMSService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
-public class TestServiceImpl implements TestService {
+public class SMSServiceImpl implements SMSService {
 
     private final SmsProvider smsProvider;
     private final ConcurrentHashMap<String, String> verificationCodes = new ConcurrentHashMap<>();
