@@ -35,6 +35,6 @@
 | SignUpPage2         | 회원가입 패이지2 (인증번호 확인)             |
 | SignUpPage3         | 회원가입 패이지3 (이메일 ,닉네임 입력)       |
 | API_KEY             | APIKEY 보관 페이지(gitignore 설정 필수)      |
-| apiKeyManager       |                                              |
+| StartPage.dart      | 가장 첫 화면 (시작하기)                                             |
 | main                | 첫 화면 페이지                               |
 | color               | 프로젝트에서 많이 사용되는 색깔 저장         |
