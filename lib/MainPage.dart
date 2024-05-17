@@ -7,7 +7,7 @@ import 'package:holo/MainPages/Profile.dart';
 import 'package:holo/MainPages/Switching.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   _MainPageState createState() => _MainPageState();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:holo/AppBarIcons/appbar_profile.dart';
 import 'package:holo/AppBarIcons/appbar_search.dart';
 import 'package:holo/AppBarIcons/appbar_setting.dart';
@@ -8,30 +7,39 @@ import '../AppBarIcons/appbar_alarm.dart';
 
 class HoloAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String region;
-  final bool profile, search, setting, alarm;
+  final bool profile, search, setting, alarm, underbar;
   final BuildContext context;
 
   const HoloAppBar(
-      {Key? key,
+      {super.key,
       required this.region,
       required this.context,
       required this.profile,
       required this.search,
       required this.setting,
-      required this.alarm})
-      : super(key: key);
+      required this.alarm,
+      required this.underbar});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      shape: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+      scrolledUnderElevation: 0,
+      shape: underbar
+          ? Border(bottom: BorderSide(color: Colors.grey, width: 1))
+          : null,
+
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            region,
-            style: TextStyle(fontSize: 18),
+          Row(
+            children: [
+              Text(
+                region,
+                style: TextStyle(fontSize: 16),
+              ),
+              SvgPicture.asset("assets/icons/under-direction.svg"),
+            ],
           ),
           Row(
             children: [
@@ -90,5 +98,5 @@ class HoloAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(MediaQuery.of(context).size.height / 12);
+      Size.fromHeight(MediaQuery.of(context).size.height / 13);
 }

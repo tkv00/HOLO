@@ -19,7 +19,7 @@ class _LifeInformationState extends State<LifeInformation> {
         profile: false,
         search: false,
         setting: false,
-        alarm: true,
+        alarm: true, underbar: true,
       ),
     );
   }

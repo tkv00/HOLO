@@ -19,7 +19,7 @@ class _ProfileState extends State<Profile> {
         profile: false,
         search: false,
         setting: true,
-        alarm: false,
+        alarm: false, underbar: false,
       ),
     );
   }

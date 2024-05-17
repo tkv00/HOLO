@@ -22,10 +22,11 @@ class _MainPageState extends State<Home> {
       appBar: HoloAppBar(
         region: '감삼동',
         context: context,
-        profile: false,
-        search: false,
+        profile: true,
+        search: true,
         setting: false,
         alarm: true,
+        underbar: true,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +65,11 @@ class _MainPageState extends State<Home> {
                         borderSide: BorderSide(color: Color(0xFF0077FF)),
                       ),
                     ),
-                    onChanged: (value) {
-                      // 검색어 변경 시 동작할 코드
-                    },
-                    onSubmitted: (value) {Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SearchPage()));
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchPage()));
                       // 검색 버튼을 눌렀을 때 동작할 코드
                     },
                   ),
