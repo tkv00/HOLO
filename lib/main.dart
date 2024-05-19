@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holo/StartPage.dart';
+import 'package:holo/MainPage.dart';
 
 void main(){ runApp(MyApp());}
 class MyApp extends StatelessWidget {
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'HOLO',
       debugShowCheckedModeBanner: false,
-      home:StartPage(),
+      home:MainPage(),
     );
   }
 }
