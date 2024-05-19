@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:holo/theme/color.dart'; // color.dart에서 적절한 색상 정보를 가져오는 것으로 가정합니다.
 import 'package:geolocator/geolocator.dart';
-import 'package:holo/controller/apiKeyManager.dart';
 import 'package:holo/controller/API_KEY.dart';
 class SetLocationPage extends StatefulWidget {
   const SetLocationPage({super.key});

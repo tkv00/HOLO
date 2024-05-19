@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:holo/theme/color.dart';
 import 'package:flutter/services.dart';
-import 'package:holo/SignUp/FindAccountByEmail1.dart';
 import 'package:holo/SignUp/LoginPage2.dart';
+import 'package:holo/controller/API_KEY.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage1 extends StatefulWidget {
   const LoginPage1({super.key});
+
 
   @override
   State<LoginPage1> createState() => _LoginPage1State();
@@ -45,6 +48,40 @@ class _LoginPage1State extends State<LoginPage1> {
     return true;
   }
 
+  Future<void> _LoginToPhoneNumber(String number) async {
+    var response = await http.post(
+        Uri.parse('$HTTP_KEY/message/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'phoneNumber': '$number',
+        })
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('인증번호가 성공적으로 전송되었습니다.'))
+    );
+
+    Navigator
+        .of(context)
+        .push(MaterialPageRoute(
+        builder: (context) => LoginPage2(phoneNumber: number))
+    );
+        }
+
+  void _trySubmit() {
+    if (_isButtonEnabled && _formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      _LoginToPhoneNumber(_phoneController.text);
+    } else {
+      ScaffoldMessenger
+          .of(context)
+          .showSnackBar(
+          SnackBar(content: Text('휴대폰 번호를 다시 확인해 주세요.'))
+      );
+          }
+      }
 
   @override
   void dispose() {
@@ -106,7 +143,8 @@ class _LoginPage1State extends State<LoginPage1> {
                           width: 2.0
                       )
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '휴대폰 번호(-없이 숫자만 입력)',
                   fillColor: gray10,
@@ -133,18 +171,9 @@ class _LoginPage1State extends State<LoginPage1> {
                     .of(context)
                     .size
                     .height * 0.05,
+
                 child: ElevatedButton(
-                  onPressed: _isButtonEnabled ? () {
-                    if (_validatePhoneNumber()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              LoginPage2(phoneNumber: _phoneController.text),
-                        ),
-                      );
-                    }
-                  } : null,
+                  onPressed: _isButtonEnabled ? _trySubmit : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isButtonEnabled ? blue : gray10,
                     // 버튼 활성화 시 색상 변경
@@ -166,31 +195,31 @@ class _LoginPage1State extends State<LoginPage1> {
               SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '휴대폰 번호가 변경되었나요?',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                                FindAccountByEmail1())
-                        );
-                      },
-
-                      child: Text(
-                        '이메일로 계정 찾기',
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                            decoration: TextDecoration.underline),
-                      ))
-                ],
-              )
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Text(
+              //       '휴대폰 번호가 변경되었나요?',
+              //       style: TextStyle(color: Colors.black, fontSize: 12),
+              //     ),
+              //     TextButton(
+              //         onPressed: () {
+              //           Navigator.push(
+              //               context,
+              //               MaterialPageRoute(builder: (context) =>
+              //                   FindAccountByEmail1())
+              //           );
+              //         },
+              //
+              //         child: Text(
+              //           '이메일로 계정 찾기',
+              //           style: TextStyle(
+              //               fontSize: 12,
+              //               color: Colors.black,
+              //               decoration: TextDecoration.underline),
+              //         ))
+              //   ],
+              // )
             ],
           ),
         ),

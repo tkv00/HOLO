@@ -41,6 +41,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
     _birthDayFocus.addListener(() => _onFocusChange(_birthDayFocus));
     _phoneFocus.addListener(() => _onFocusChange(_phoneFocus));
   }
+
   void _checkFormValidity() {
     bool isValid = _nameController.text.isNotEmpty &&
         _birthDayController.text.isNotEmpty &&
@@ -53,6 +54,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
       });
     }
   }
+
   void _onFocusChange(FocusNode focusNode) {
     if (!focusNode.hasFocus) {
       setState(() {
@@ -60,6 +62,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
       });
     }
   }
+
   Future<void> _sendPhoneNumberToServer(String number) async {
     var response = await http.post(
       Uri.parse('$HTTP_KEY/message/send'), // 서버의 주소와 엔드포인트를 정확히 입력하세요.
@@ -67,35 +70,32 @@ class _SignUpPage1State extends State<SignUpPage1> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'phoneNumber':'$number',
-
+        'phoneNumber': '$number',
       }),
     );
-    if (response.statusCode == 200) {
-      //userInfo전송
-      Map<String,String> userInfo={
-        'name':_nameController.text,
-        'birthday':_birthDayController.text,
-        'phone':_phoneNumberController.text,
-        'city':widget.selectedCity,
-      };
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('인증번호가 성공적으로 전송되었습니다.')));
 
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context)=>
-              SignUpPage2(userInfo: userInfo))
-      );
+    //userInfo전송
+    Map<String, String> userInfo = {
+      'name': _nameController.text,
+      'birthday': _birthDayController.text,
+      'phone': _phoneNumberController.text,
+      'city': widget.selectedCity,
+    };
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('인증번호가 성공적으로 전송되었습니다.')));
 
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('휴대폰 번호를 다시 확인해 주세요.')));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => SignUpPage2(userInfo: userInfo)));
 
-      }
   }
 
   void _trySubmit() {
     if (_isButtonEnabled && _formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _sendPhoneNumberToServer(_phoneNumberController.text);
+    }else{
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('휴대폰 번호를 다시 확인해 주세요.')));
     }
   }
 
@@ -160,7 +160,8 @@ class _SignUpPage1State extends State<SignUpPage1> {
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: blue, width: 2.0)),
-                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '이름',
                   fillColor: gray10,
@@ -192,7 +193,8 @@ class _SignUpPage1State extends State<SignUpPage1> {
                         labelText: '주민등록번호 앞 6자리',
                         fillColor: gray10,
                         filled: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -217,7 +219,8 @@ class _SignUpPage1State extends State<SignUpPage1> {
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: blue, width: 2.0)),
                         fillColor: gray10,
@@ -244,7 +247,8 @@ class _SignUpPage1State extends State<SignUpPage1> {
                 controller: _phoneNumberController,
                 focusNode: _phoneFocus,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '휴대폰 번호(-없이 숫자만 입력)',
                   focusedBorder: OutlineInputBorder(
@@ -279,7 +283,8 @@ class _SignUpPage1State extends State<SignUpPage1> {
                 child: ElevatedButton(
                   onPressed: _isButtonEnabled ? _trySubmit : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isButtonEnabled ? blue : gray10, // 버튼 활성화 시 색상 변경
+                    backgroundColor: _isButtonEnabled ? blue : gray10,
+                    // 버튼 활성화 시 색상 변경
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

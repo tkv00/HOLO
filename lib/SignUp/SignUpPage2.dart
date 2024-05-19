@@ -82,7 +82,7 @@ class _SignUpPage2State extends State<SignUpPage2> {
         'verificationCode':code,
       }),
     );
-    if(response.statusCode==20) {
+    if(response.statusCode==200) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('인증이 완료되었습니다.')));
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) =>
@@ -196,7 +196,7 @@ class _SignUpPage2State extends State<SignUpPage2> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4)
+                  LengthLimitingTextInputFormatter(6)
                 ],
               ),
               const Text(

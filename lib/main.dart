@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:holo/StartPage.dart';
 
+
 void main(){ runApp(MyApp());}
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}):super(key:key);
 
   @override
   Widget build(BuildContext context) {

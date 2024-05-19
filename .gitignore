@@ -41,4 +41,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-lib/controller/apiKeyManager.dart
+
+# API keys
+./lib/controller/
