@@ -64,36 +64,60 @@ class _SignUpPage1State extends State<SignUpPage1> {
   }
 
   Future<void> _sendPhoneNumberToServer(String number) async {
-    var response = await http.post(
-      Uri.parse('$HTTP_KEY/message/send'), // 서버의 주소와 엔드포인트를 정확히 입력하세요.
+    //서버에 회원정보가 존재하는가
+    var checkResponse = await http.get(
+      Uri.parse('$HTTP_KEY/'), //여기에 API 엔드 포인트 입력
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode({
-        'phoneNumber': '$number',
-      }),
+
     );
+    if (checkResponse.statusCode == 200) {
+      var userExists = jsonDecode(checkResponse.body)['exists'] as bool;
+      if (userExists) {
+        // 사용자가 이미 존재하는 경우
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('이미 존재하는 회원입니다.')));
+      } else {
+        // 사용자가 존재하지 않는 경우, 인증번호 전송
+        var response = await http.post(
+          Uri.parse('$HTTP_KEY/message/send'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({'phoneNumber': '$number'}),
+        );
 
-    //userInfo전송
-    Map<String, String> userInfo = {
-      'name': _nameController.text,
-      'birthday': _birthDayController.text,
-      'phone': _phoneNumberController.text,
-      'city': widget.selectedCity,
-    };
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('인증번호가 성공적으로 전송되었습니다.')));
+        if (response.statusCode == 200) {
+          // 사용자 정보 전송
+          Map<String, String> userInfo = {
+            'name': _nameController.text,
+            'birthday': _birthDayController.text,
+            'phone': _phoneNumberController.text,
+            'city': widget.selectedCity,
+          };
 
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => SignUpPage2(userInfo: userInfo)));
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('인증번호가 성공적으로 전송되었습니다.')));
 
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SignUpPage2(userInfo: userInfo)));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('인증번호 전송 실패, 서버 에러')));
+        }
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('사용자 확인 실패, 서버 에러')));
+    }
   }
 
   void _trySubmit() {
     if (_isButtonEnabled && _formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       _sendPhoneNumberToServer(_phoneNumberController.text);
-    }else{
+    } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('휴대폰 번호를 다시 확인해 주세요.')));
     }
@@ -161,7 +185,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: blue, width: 2.0)),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '이름',
                   fillColor: gray10,
@@ -194,7 +218,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
                         fillColor: gray10,
                         filled: true,
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -220,7 +244,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: blue, width: 2.0)),
                         fillColor: gray10,
@@ -248,7 +272,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
                 focusNode: _phoneFocus,
                 decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   border: InputBorder.none,
                   labelText: '휴대폰 번호(-없이 숫자만 입력)',
                   focusedBorder: OutlineInputBorder(
@@ -278,8 +302,14 @@ class _SignUpPage1State extends State<SignUpPage1> {
               // 마지막 버튼
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 5.0),
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.05,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.9,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.05,
                 child: ElevatedButton(
                   onPressed: _isButtonEnabled ? _trySubmit : null,
                   style: ElevatedButton.styleFrom(

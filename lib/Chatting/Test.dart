@@ -16,19 +16,22 @@ class Test extends StatelessWidget {
           SizedBox(height:400,),
           TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
+                Navigator.of(context).push(
+
                     MaterialPageRoute(
                         builder: (context) =>
-                            ChatController()));
+                            ChatController(userPhoneNumber: phoneNumber,opponentUserPhoneNumber:"01066361710"),
+                    ));
               },
               child: Text(
-                '상대 이름 :$phoneNumber',
+                '상대 번호 :01066361710',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                 ),
-              ))
+              ),
+          ),
+
         ],
       ),
     );

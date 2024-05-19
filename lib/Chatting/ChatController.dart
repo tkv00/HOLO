@@ -4,9 +4,13 @@ import 'package:holo/Chatting/ChatBubble.dart';
 import 'package:holo/controller/API_KEY.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:convert';
 
 class ChatController extends StatefulWidget {
-  const ChatController({super.key});
+  final String userPhoneNumber;
+  final String opponentUserPhoneNumber;
+
+  const ChatController({Key? key, required this.userPhoneNumber,required this.opponentUserPhoneNumber}) : super(key: key);
 
   @override
   State<ChatController> createState() => _ChatControllerState();
@@ -23,8 +27,9 @@ class _ChatControllerState extends State<ChatController> {
     super.initState();
     // 웹소켓 서버 연결 설정
     channel = IOWebSocketChannel.connect(
-        Uri.parse(''));//여기다가 서버 주소넣어라
-
+        Uri.parse('ws://:8080/ws/chat')); //여기다가 서버 주소넣어라
+    // 채팅방에 입장하는 메시지 보내기
+    _sendEnterMessage();
 
     // 웹소켓에서 메시지 수신 리스닝
     channel.stream.listen((message) {
@@ -43,10 +48,35 @@ class _ChatControllerState extends State<ChatController> {
 
   void _sendMessage() {
     if (_textEditingController.text.isNotEmpty) {
-      // 웹소켓 서버로 메시지 전송
-      channel.sink.add(_textEditingController.text);
+      // 메시지 포맷에 맞게 데이터 구성
+      Map<String, dynamic> messageData = {
+        "Type": "TALK", // 메시지 타입 지정, ENTER나 LEAVE 등 상황에 맞게 변경 가능
+        "RoomID": "", // 고정된 RoomID 사용
+        "Sender": "user1", // 사용자 식별자, 동적으로 변경 가능해야 합니다.
+        "Message": _textEditingController.text // 사용자가 입력한 메시지
+      };
+
+      // JSON 형식으로 인코딩하여 웹소켓 서버로 전송ㅇ
+      channel.sink.add(jsonEncode(messageData));
       _textEditingController.clear();
+
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
     }
+  }
+
+  void _sendEnterMessage() {
+    Map<String, dynamic> enterMessage = {
+      "Type": "ENTER",
+      "RoomID":"", // RoomID로 전화번호 사용
+      "Sender": "user1", // 실제 사용자 식별 정보로 수정해야 함
+      "Message": "",
+      "SenderPhoneNum":"",//나중에 현재 이 디바이스를 사용증인 유저의 폰 번호
+      "RecieverPhoneNum":"",//나중에 보내고 싶은 사람의 유저프로필 눌렀을 때의 번호 즉, 상대방 번호 서버에 전달
+    };
+
+    channel.sink.add(jsonEncode(enterMessage));
   }
 
   @override
@@ -149,7 +179,7 @@ class _ChatControllerState extends State<ChatController> {
                             borderRadius: BorderRadius.circular(40)),
                         contentPadding: EdgeInsets.only(left: 20),
                       ),
-                      onSubmitted: (text)=>_sendMessage(),
+                      onSubmitted: (text) => _sendMessage(),
                     ),
                   ),
                   IconButton(

@@ -37,7 +37,7 @@ class _LoginPage2State extends State<LoginPage2> {
     _codeController.addListener(_onCodeChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
-    })
+    });
   }
 
   _asyncMethod() async {
@@ -220,7 +220,7 @@ class _LoginPage2State extends State<LoginPage2> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(4)
+                  LengthLimitingTextInputFormatter(6)
                 ],
               ),
               const Text(
