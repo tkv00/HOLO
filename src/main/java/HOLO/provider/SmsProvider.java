@@ -1,4 +1,4 @@
-package com.backend.Holo.provider;
+package HOLO.provider;
 
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;

@@ -1,6 +1,6 @@
-package com.backend.Holo.repository;
+package HOLO.repository;
 
-import com.backend.Holo.entity.UserEntity;
+import HOLO.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
