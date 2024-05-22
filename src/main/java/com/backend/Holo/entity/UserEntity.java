@@ -1,7 +1,6 @@
 package com.backend.Holo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -33,22 +32,39 @@ public class UserEntity {
     @NotEmpty(message = "닉네임 기입은 필수입니다.")
     private String nickName;
 
-    @Email
-    @NotNull
-    @NotEmpty(message = "이메일 주소 기입은 필수입니다.")
-    private String email;
+    private String verificationCode;
 
     @Column(unique = true)
     private String identificationNumber;
 
+    @Column(columnDefinition = "TEXT")
     private String imageURL;
 
-    private float mannerTemp;
+    @Column(columnDefinition = "FLOAT(3,1) DEFAULT '36.5'")
+    private Float mannerTemp = 36.5f;
 
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     private LocalDateTime created;
 
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updated;
 
-    private String status;
+    @Column(length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'Active'")
+    private String status = "Active";
+
+    @PrePersist
+    protected void onCreate() {
+        if (created == null) {
+            created = LocalDateTime.now();
+        }
+        if (updated == null) {
+            updated = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = LocalDateTime.now();
+    }
 
 }
