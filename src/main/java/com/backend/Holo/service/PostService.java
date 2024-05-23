@@ -36,9 +36,14 @@ public class PostService {
         }
     }
 
-    // 카테고리별 게시물 목록 반환
+    // 카테고리별 게시물 목록 반환 (categoryId 인데스컬럼으로 접근)
     public List<PostEntity> getPostsByCategoryId(Long categoryId) {
         return postRepository.findByCategoryId(categoryId);
+    }
+
+    // 카테고리별 게시물 목록 반환 (category 및 categoryType 컬럼으로 접근)
+    public List<PostEntity> getPostsByCategoryAndCategoryType(String category, String categoryType) {
+        return postRepository.findByCategory_CategoryAndCategory_CategoryType(category, categoryType);
     }
 
     // 게시글 삭제

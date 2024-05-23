@@ -60,12 +60,29 @@ public class PostController {
         }
     }
 
-    // 카테고리별 게시물 표시 Api
-    @PostMapping("/category") // /api/post/category?categoryId=4   로 사용
+    // 카테고리별 게시물 표시 Api (categoryId 컬럼으로 접근)
+    @PostMapping("/categoryId") // /api/post/categoryId?categoryId=4   로 사용
     public ResponseEntity<?> getPostsByCategory(@RequestParam Long categoryId) {
         List<PostEntity> posts = postService.getPostsByCategoryId(categoryId);
         if (posts.isEmpty()) {
             logger.info("카테고리에 해당하는 게시물이 없습니다. categoryId: {}", categoryId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"message\": \"카테고리에 해당하는 게시물이 없습니다.\"}");
+        }
+        return ResponseEntity.ok(posts);
+    }
+
+    // 카테고리별 게시물 표시 Api (category 및 categoryType 컬럼으로 접근)
+    @PostMapping("/category") // /api/post/category?category=물물교환&categoryType=생활가전    로 사용
+    public ResponseEntity<?> getPostsByCategory(@RequestParam String category, @RequestParam(required = false) String categoryType) {
+        List<PostEntity> posts;
+        if (categoryType == null || categoryType.isEmpty()) {
+            posts = postService.getPostsByCategoryAndCategoryType(category, null);
+        } else {
+            posts = postService.getPostsByCategoryAndCategoryType(category, categoryType);
+        }
+        if (posts.isEmpty()) {
+            logger.info("카테고리에 해당하는 게시물이 없습니다. category: {}, categoryType: {}", category, categoryType);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("{\"message\": \"카테고리에 해당하는 게시물이 없습니다.\"}");
         }

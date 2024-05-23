@@ -30,6 +30,10 @@ public class PostEntity {
     @NotNull
     private Long categoryId;
 
+    @ManyToOne
+    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId", insertable = false, updatable = false)
+    private CategoryEntity category;
+
     @Column(name = "cost", columnDefinition = "int DEFAULT '0'")
     private Integer cost = 0;
 

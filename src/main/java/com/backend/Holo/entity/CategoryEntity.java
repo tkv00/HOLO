@@ -1,10 +1,12 @@
 package com.backend.Holo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -48,4 +50,9 @@ public class CategoryEntity {
     protected void onUpdate() {
         updated = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private List<PostEntity> posts;
+
 }
