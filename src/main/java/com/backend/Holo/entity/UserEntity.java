@@ -1,5 +1,6 @@
 package com.backend.Holo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -31,6 +33,12 @@ public class UserEntity {
     @NotNull
     @NotEmpty(message = "닉네임 기입은 필수입니다.")
     private String nickName;
+
+    @Column(name = "city", length = 100)
+    private String city;
+
+    @Column(name = "dong", length = 45)
+    private String dong;
 
     private String verificationCode;
 
@@ -67,4 +75,7 @@ public class UserEntity {
         updated = LocalDateTime.now();
     }
 
+    @OneToMany(mappedBy = "author") // 변경된 부분
+    @JsonIgnore
+    private List<PostEntity> posts;
 }

@@ -17,8 +17,9 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @NotNull
-    private Long author; // userId
+    @ManyToOne
+    @JoinColumn(name = "author", referencedColumnName = "userId") // 변경된 부분
+    private UserEntity author;
 
     private Long addressId; // 동, 읍, 면
 
@@ -33,6 +34,7 @@ public class PostEntity {
     @ManyToOne
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId", insertable = false, updatable = false)
     private CategoryEntity category;
+
 
     @Column(name = "cost", columnDefinition = "int DEFAULT '0'")
     private Integer cost = 0;
