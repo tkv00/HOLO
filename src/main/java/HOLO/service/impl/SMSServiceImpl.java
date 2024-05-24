@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.concurrent.*;
 
 @Service
@@ -18,6 +19,7 @@ public class SMSServiceImpl implements SMSService {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ConcurrentHashMap<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
+    private static final SecureRandom secureRandom = new SecureRandom();
     @Override
     public ResponseEntity<String> sendSms(String phoneNumber) {
         String verificationCode = generateVerificationCode();
@@ -26,7 +28,7 @@ public class SMSServiceImpl implements SMSService {
         try {
             boolean result = smsProvider.sendSms(phoneNumber, messageText);
             if (!result) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("메세지 전송에 실패했습니다.");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
 
             ScheduledFuture<?> existingTask = scheduledTasks.remove(phoneNumber);
@@ -44,9 +46,9 @@ public class SMSServiceImpl implements SMSService {
             scheduledTasks.put(phoneNumber, scheduledTask);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("메세지 전송 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body("메세지 전송에 성공했습니다.");
+        return ResponseEntity.ok().build();
     }
 
     @Override
@@ -59,16 +61,16 @@ public class SMSServiceImpl implements SMSService {
             if (scheduledTask != null) {
                 scheduledTask.cancel(true);
             }
-            return ResponseEntity.ok("인증에 성공했습니다.");
+            return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증번호가 일치하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     private String generateVerificationCode() {
         StringBuilder code = new StringBuilder();
         for (int i = 0; i < 6; i++) {
-            code.append((int) (Math.random() * 10));
+            code.append(secureRandom.nextInt(10));
         }
         return code.toString();
     }
