@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:holo/SignUp/SetLocationPage.dart';
-import 'package:holo/SignUp/LoginPage.dart';
+import 'package:holo/SignUp/LoginPage1.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -92,7 +92,7 @@ class StartPage extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
+                            builder: (context) => const LoginPage1()),
                         );
 
                       },
