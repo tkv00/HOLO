@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
     List<PostEntity> findByCategoryId(Long categoryId);
+    List<PostEntity> findByCategory_CategoryAndCategory_CategoryType(String category, String categoryType);
 }
