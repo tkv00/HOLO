@@ -1,28 +1,11 @@
-```
-.
-├── SignUp
-│   ├── FindAccountByEmail1.dart
-│   ├── FindAccountByEmail2.dart
-│   ├── LoginPage1.dart
-│   ├── LoginPage2.dart
-│   ├── SetLocationPage.dart
-│   ├── SignUpPage1.dart
-│   ├── SignUpPage2.dart
-│   └── SignUpPage3.dart
-├── StartPage.dart
-├── controller
-│   ├── API_KEY.dart
-│   └── apiKeyManager.dart
-├── document.txt
-├── main.dart
-└── theme
-    └── color.dart
+
 
 ```
 4 directories, 14 files
 
 
 ## 각 페이지 설명
+
 
 | Page Name           | Description                                  |
 |---------------------|----------------------------------------------|
@@ -38,3 +21,14 @@
 | StartPage.dart      | 가장 첫 화면 (시작하기)                                             |
 | main                | 첫 화면 페이지                               |
 | color               | 프로젝트에서 많이 사용되는 색깔 저장         |
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+
+
