@@ -17,8 +17,8 @@ public class PostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @NotNull
-    private Long author; // userId
+    // @NotNull
+    private Long userId;
 
     private Long addressId; // 동, 읍, 면
 
@@ -27,7 +27,7 @@ public class PostEntity {
     @Column(name = "title", length = 100)
     private String title;
 
-    @NotNull
+    // @NotNull
     private Long categoryId;
 
     @ManyToOne
@@ -46,8 +46,14 @@ public class PostEntity {
     @Column(name = "contents", columnDefinition = "TEXT")
     private String contents;
 
+    @Column(name = "toGive", length = 50, columnDefinition = "varchar(50) DEFAULT '없음'")
+    private String toGive = "없음";
+
     @Column(name = "wishToExchange", length = 50, columnDefinition = "varchar(50) DEFAULT '없음'")
     private String wishToExchange = "없음";
+
+    @Column(name = "wishToExchangeCity", length = 50, columnDefinition = "varchar(50) DEFAULT '없음'")
+    private String wishToExchangeCity = "없음";
 
     @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     private LocalDateTime created;
