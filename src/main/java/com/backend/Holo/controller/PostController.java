@@ -82,66 +82,22 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-//    // 카테고리별 게시물 표시 Api (category 및 categoryType 컬럼으로 접근)
-//    @PostMapping("/category") // /api/post/category?category=물물교환&categoryType=생활가전    로 사용
-//    public ResponseEntity<?> getPostsByCategory(@RequestParam String category, @RequestParam(required = false) String categoryType) {
-//        List<PostEntity> posts;
-//        if (categoryType == null || categoryType.isEmpty()) {
-//            posts = postService.getPostsByCategoryAndCategoryType(category, null);
-//        } else {
-//            posts = postService.getPostsByCategoryAndCategoryType(category, categoryType);
-//        }
-//        if (posts.isEmpty()) {
-//            logger.info("카테고리에 해당하는 게시물이 없습니다. category: {}, categoryType: {}", category, categoryType);
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("{\"message\": \"카테고리에 해당하는 게시물이 없습니다.\"}");
-//        }
-//        return ResponseEntity.ok(posts);
-//    }
-
-//    @PostMapping("/category")
-//    public ResponseEntity<?> getPostsByCategory(@RequestParam String category, @RequestParam(required = false) String categoryType) {
-//        List<PostEntity> posts;
-//        if (categoryType == null || categoryType.isEmpty()) {
-//            posts = postService.getPostsByCategoryAndCategoryType(category, null);
-//        } else {
-//            posts = postService.getPostsByCategoryAndCategoryType(category, categoryType);
-//        }
-//        if (posts.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"카테고리에 해당하는 게시물이 없습니다.\"}");
-//        }
-//
-//        // PostDTO로 변환
-//        List<CategoryPostDto> categoryPostDtos = posts.stream()
-//                .map(post -> {
-//                    CategoryDto categoryDTO = new CategoryDto(
-//                            post.getCategory().getCategoryId(),
-//                            post.getCategory().getCategory(),
-//                            post.getCategory().getCategoryType()
-//                    );
-//
-//                    UserInfoDto userInfoDto = new UserInfoDto(
-//                            post.getUserId().ge
-//                            post.getUserId().getPhoneNumber(),
-//                            post.getUserId().getNickName(),
-//                            post.getUserId().getCity(),
-//                            post.getUserId().getDong(),
-//                            post.getUserId().getMannerTemp()
-//                    );
-//
-//                    return new CategoryPostDto(
-//                            post.getPostId(),
-//                            post.getCategoryId(),
-//                            post.getTitle(),
-//                            categoryDTO,
-//                            userInfoDto
-//                    );
-//                })
-//                .collect(Collectors.toList());
-//
-//        return ResponseEntity.ok(categoryPostDtos);
-//    }
-
+    // 카테고리별 게시물 표시 Api (category 및 categoryType 컬럼으로 접근)
+    @PostMapping("/category") // /api/post/category?category=물물교환&categoryType=생활가전    로 사용
+    public ResponseEntity<?> getPostsByCategory(@RequestParam String category, @RequestParam(required = false) String categoryType) {
+        List<PostEntity> posts;
+        if (categoryType == null || categoryType.isEmpty()) {
+            posts = postService.getPostsByCategoryAndCategoryType(category, null);
+        } else {
+            posts = postService.getPostsByCategoryAndCategoryType(category, categoryType);
+        }
+        if (posts.isEmpty()) {
+            logger.info("카테고리에 해당하는 게시물이 없습니다. category: {}, categoryType: {}", category, categoryType);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"message\": \"카테고리에 해당하는 게시물이 없습니다.\"}");
+        }
+        return ResponseEntity.ok(posts);
+    }
 
     // 게시물 삭제관련 Api
     @PostMapping("/delete") // /api/post/delete?postId=4   로 사용

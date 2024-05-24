@@ -75,4 +75,7 @@ public class UserEntity {
         updated = LocalDateTime.now();
     }
 
+    @OneToMany(mappedBy = "author") // 변경된 부분
+    @JsonIgnore
+    private List<PostEntity> posts;
 }
