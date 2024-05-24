@@ -1,7 +1,6 @@
 package HOLO.controller;
 
 import HOLO.service.SMSService;
-import HOLO.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,34 +14,37 @@ import java.util.Map;
 public class SMSController {
 
     private final SMSService smsService;
-    private final UserService userService;
 
     @PostMapping("/send")
-    public ResponseEntity<String> sendSms(@RequestBody Map<String, String> requestBody,
-                                          @RequestParam String type) {
+    public ResponseEntity<String> sendSms(@RequestBody Map<String, String> requestBody) {
         String phoneNumber = requestBody.get("phoneNumber");
 
-        if ("signup".equals(type)) {
-            if (userService.userExists(phoneNumber)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 존재하는 회원입니다.");
-            }
-        } else if ("login".equals(type)) {
-            if (!userService.userExists(phoneNumber)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("먼저 회원가입을 하시길 바랍니다.");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청 타입입니다.");
+        if (phoneNumber == null || phoneNumber.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("전화번호가 유효하지 않습니다.");
         }
 
         ResponseEntity<String> response = smsService.sendSms(phoneNumber);
-        return response;
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok("SMS 전송 성공");
+        } else {
+            return ResponseEntity.status(response.getStatusCode()).body("메세지 전송에 실패했습니다.");
+        }
     }
 
     @PostMapping("/check")
     public ResponseEntity<String> checkCode(@RequestBody Map<String, String> requestBody) {
         String phoneNumber = requestBody.get("phoneNumber");
         String verificationCode = requestBody.get("verificationCode");
+
+        if (phoneNumber == null || verificationCode == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("전화번호 또는 인증 코드가 유효하지 않습니다.");
+        }
+
         ResponseEntity<String> response = smsService.checkVerificationCode(phoneNumber, verificationCode);
-        return response;
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok("인증에 성공했습니다.");
+        } else {
+            return ResponseEntity.status(response.getStatusCode()).body("인증에 실패했습니다.");
+        }
     }
 }
